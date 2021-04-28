@@ -13,15 +13,15 @@
 
 
 //Accumulator DFF
-module DFF(clk, in, out);
+//module DFF(clk, in, out);
 
-endmodule
+//endmodule
 
 module Mux(channels,select,b);
 input [3:0][3:0]channels;
 input [1:0] select;
 output [3:0] b;
-wire[3:0][1:0] channels;
+wire[3:0][3:0] channels;
 reg [3:0] b;
 always @(*)
 begin
@@ -31,22 +31,53 @@ end
 endmodule
 
 module breadboard(Data, select);
+input [3:0] [3:0] Data;
+input [1:0] select;
 wire [3:0][3:0]channels;
-wire [3:0][3:0] Data = Data
+wire [3:0]Data0 = Data[0];
+wire [3:0]Data1 = Data[1];
+wire [3:0]Data2 = Data[2];
+wire [3:0]Data3 = Data[3];
+wire [1:0] select;
+wire [3:0] b;
 
 Mux mux1(channels,select,b);
-assign channels[0]=Data[0];//OpCode 1
-assign channels[1]=Data[1];//OpCode 2
-assign channels[2]=Data[2];//OpCode 3
-assign channels[3]=Data[3];//OpCode 4
-
-reg [3:0] opcode = b;
+assign channels[0]=Data0;//OpCode 1
+assign channels[1]=Data1;//OpCode 2
+assign channels[2]=Data2;//OpCode 3
+assign channels[3]=Data3;//OpCode 4
 
 endmodule
 
 module testbench();
-	reg [3:0] select;
+	reg [1:0] select;
 	reg [3:0] [3:0] Data;
 	
 	breadboard bb8(Data, select);
+	
+	initial begin //Start Output Thread
+	forever
+         begin
+		 $display("(OPCODE:%4b)",bb8.b);
+		 #10;
+		 end
+	end
+	
+	initial begin//Start Stimulous Thread
+	#6
+	select = 2'b00;
+	Data = 16'b0000111101011010;
+	#10
+	select = 2'b01;
+	Data = 16'b0000111101011010;
+	#10
+	select = 2'b10;
+	Data = 16'b0000111101011010;
+	#10
+	select = 2'b11;
+	Data = 16'b0000111101011010;
+	#10
+	
+	$finish;
+	end
 endmodule
