@@ -11,6 +11,15 @@
 `define MOVEJAW   '4b1101 //11=Movement/Effect, 01=MOVEJAW
 `define FOG       '4b1110 //11=Movement/Effect, 10=FOG
 
+module fulladder (input [1:0] a,  
+                  input [1:0] b,    
+                  output reg c_out,  
+                  output reg [1:0] sum);  
+  
+  always @ (a or b) begin  
+    {c_out, sum} = a + b;  
+  end  
+endmodule  
 
 module Mux(channels,select, b);
 input [3:0][3:0]channels;
@@ -39,52 +48,6 @@ module DFF(rst,clk,in,out);
         out = in; 
 endmodule
 
-//HALF-ADDER
-module Add_half (input a, b,  output c_out, sum);
-   xor G1(sum, a, b);	 
-   and G2(c_out, a, b);
-endmodule
-
-//FULL-ADDER
-module Add_full (input a, b, c_in, output c_out, sum);
-   wire w1, w2, w3;	 
-   Add_half M1 (a, b, w1, w2);
-   Add_half M0 (w2, c_in, w3, sum);
-   or (c_out, w1, w3);
-endmodule
-
-//ADD operation
-module ADDER(inputA,inputB,outputC,carry);
-//---------------------------------------
-input [1:0] inputA;
-input [1:0] inputB;
-wire [1:0] inputA;
-wire [1:0] inputB;
-//---------------------------------------
-output [1:0] outputC;
-output carry;
-reg [1:0] outputC;
-reg carry;
-//---------------------------------------
-
-wire [1:0] S;
-wire [1:0] Cin;
-wire [1:0] Cout;
-//Link the wires between the Adders
-assign Cin[0]=0;
-assign Cin[1]=Cout[0];
-
-//Declare and Allocate 4 Full adders
-Add_full FA[1:0] (inputA,inputB,Cin,Cout,S);
-
-always @(*)
-begin
- carry=Cout[1];
- outputC=S;
-end
-
-endmodule
-
 module breadboard(on, clk, data);
 input clk; 
 input on;
@@ -105,7 +68,7 @@ wire [1:0] outputADD;
 reg  [1:0] next;
 wire [1:0] cur;
 
-ADDER add1(regA,regB,outputADD,carry);
+fulladder FA(regA,regB,carry,outputADD);
 DFF ACC1 (on,clk,next,cur);
 Mux mux1(channels,cur,opcode);
 
