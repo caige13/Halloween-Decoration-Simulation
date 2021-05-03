@@ -6,7 +6,6 @@
 `define SCREAMING '4b1000 //10=Sound, 00=SCREAMING
 `define CACKLING  '4b1001 //10=Sound, 01=CACKLING
 `define BOO       '4b1010 //10=Sound, 10=BOO
-`define BOO       '4b1010 //10=Sound, 10=BOO
 `define WAVEHANDS '4b1100 //11=Movement/Effect, 00=WAVEHANDS
 `define MOVEJAW   '4b1101 //11=Movement/Effect, 01=MOVEJAW
 `define FOG       '4b1110 //11=Movement/Effect, 10=FOG
