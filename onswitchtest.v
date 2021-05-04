@@ -12,16 +12,16 @@
 
 module OR_1(output Y, input A, B);
    assign Y = A | B; 
-endmodule
+endmodule 
 
 module NOR_1(a, out);
 input [3:0] a;
 output out ;
-wire out ;
-always(a)
-begin
-assign out = ~(a[0]|a[1]|a[2]|a[3]);
-end
+reg out ;
+    always @(a)
+    begin
+    out = ~(a[0]|a[1]|a[2]|a[3]);
+    end
 endmodule
 
 module fulladder (input [1:0] a,  
@@ -137,12 +137,12 @@ module testbench();
 	
 	initial begin//Start Stimulous Thread
 	#6
-	rst=0;
-	data = 16'b0000111101011010;
+	rst=1;
+	data = 16'b0000000000000000;
 	#5
 	rst=0;
 	#30
-	data = 16'b1111111111111111;
+	data = 16'b1101111101010100;
 	#40
 	
 	$finish;
