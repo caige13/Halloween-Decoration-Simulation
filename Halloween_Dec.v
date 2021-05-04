@@ -10,6 +10,7 @@
 `define MOVEJAW   '4b1101 //11=Movement/Effect, 01=MOVEJAW
 `define FOG       '4b1110 //11=Movement/Effect, 10=FOG
 
+///////////////////////////////////
 module fulladder (input [1:0] a,  
                   input [1:0] b,    
                   output reg c_out,  
@@ -20,6 +21,7 @@ module fulladder (input [1:0] a,
   end  
 endmodule  
 
+///////////////////////////////////
 module Mux(channels,select, b);
 input [3:0][3:0]channels;
 input [1:0] select;
@@ -32,6 +34,7 @@ begin
 end
 endmodule
 
+///////////////////////////////////
 module DFF(rst,clk,in,out);
 	parameter n=2;//width
 	input clk;
@@ -47,6 +50,7 @@ module DFF(rst,clk,in,out);
         out = in; 
 endmodule
 
+///////////////////////////////////
 module breadboard(on, clk, data);
 input clk; 
 input on;
@@ -84,6 +88,7 @@ begin
 end
 endmodule
 
+///////////////////////////////////
 module testbench();
    reg [1:0] inputA;
    reg [1:0] inputB;
