@@ -11,6 +11,22 @@
 `define FOG       '4b1110 //11=Movement/Effect, 10=FOG
 
 ///////////////////////////////////
+module OR_1(output Y, input A, B);
+   assign Y = A | B; 
+endmodule 
+
+///////////////////////////////////
+module NOR_1(a, out);
+input [3:0] a;
+output out ;
+reg out ;
+    always @(a)
+    begin
+    out = ~(a[0]|a[1]|a[2]|a[3]);
+    end
+endmodule
+
+///////////////////////////////////
 module fulladder (input [1:0] a,  
                   input [1:0] b,    
                   output reg c_out,  
@@ -55,6 +71,8 @@ module breadboard(on, clk, data);
 input clk; 
 input on;
 input [3:0] [3:0] data;
+input norout;
+input orout;
 wire clk;
 wire on;
 wire [3:0][3:0]channels;
@@ -70,9 +88,13 @@ wire [1:0] outputADD;
 
 reg  [1:0] next;
 wire [1:0] cur;
+wire norout;
+wire orout;
 
+NOR_1 nor1(Data0, norout);
+OR_1 or1(orout, norout, on);
 fulladder FA(regA,regB,carry,outputADD);
-DFF ACC1 (on,clk,next,cur);
+DFF ACC1 (orout,clk,next,cur);
 Mux mux1(channels,cur,opcode);
 
 assign channels[0]=Data0;//OpCode 1
@@ -120,11 +142,11 @@ module testbench();
 	initial begin//Start Stimulous Thread
 	#6
 	rst=1;
-	data = 16'b0000111101011010;
+	data = 16'b0000000000000000;
 	#5
 	rst=0;
 	#30
-	data = 16'b1111111111111111;
+	data = 16'b1101111101010100;
 	#40
 	
 	$finish;
