@@ -96,7 +96,8 @@ OR_1 or1(orout, norout, on);
 fulladder FA(regA,regB,carry,outputADD);
 DFF ACC1 (orout,clk,next,cur);
 Mux mux1(channels,cur,opcode);
-
+decoder_4x16 decoder(d_out, opcode);
+	
 assign channels[0]=Data0;//OpCode 1
 assign channels[1]=Data1;//OpCode 2
 assign channels[2]=Data2;//OpCode 3
@@ -157,8 +158,8 @@ module decoder_4x16 (d_out, d_in);
    output [15:0] d_out;
    input [3:0]   d_in;
    parameter tmp = 16'b0000_0000_0000_0001;
-
-assign d_out = (d_in == 4'b0000) ? tmp   :
+always @ (d_in)
+	assign d_out = (d_in == 4'b0000) ? tmp   :
                (d_in == 4'b0001) ? tmp<<1:
                (d_in == 4'b0010) ? tmp<<2:
                (d_in == 4'b0011) ? tmp<<3:
