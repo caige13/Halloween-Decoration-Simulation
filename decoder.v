@@ -2,7 +2,7 @@ module decoder_4x16 (d_out, d_in);
    output [15:0] d_out;
    input [3:0]   d_in;
    parameter tmp = 16'b0000_0000_0000_0001;
-
+always @ (d_in)
 assign d_out = (d_in == 4'b0000) ? tmp   :
                (d_in == 4'b0001) ? tmp<<1:
                (d_in == 4'b0010) ? tmp<<2:
