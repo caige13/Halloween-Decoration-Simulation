@@ -18,7 +18,10 @@ module NOR_1(a, out);
 input [3:0] a;
 output out ;
 wire out ;
+always(a)
+begin
 assign out = ~(a[0]|a[1]|a[2]|a[3]);
+end
 endmodule
 
 module fulladder (input [1:0] a,  
