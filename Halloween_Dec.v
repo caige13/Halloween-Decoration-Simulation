@@ -147,6 +147,76 @@ module testbench();
    reg clk;
    reg rst;
    
+    /*
+      always @(d_out) begin
+        case(d_out)
+          16'b000000000000000 : initial begin
+                  forever
+                    begin
+                    $display("~~~~Fog~~~~~");
+                    #10;
+                    end
+                  end
+          16'b000000000000100 : initial begin
+                      forever
+                        begin
+                        $display("Green");
+                        #10;
+                        end
+                      end 
+          16'b000000000000101 : initial begin
+                      forever
+                        begin
+                        $display("Purple");
+                        #10;
+                        end
+                      end 
+          16'b000000000000110 : initial begin
+                      forever
+                        begin
+                        $display("Orange");
+                        #10;
+                        end
+                      end  
+          16'b000000000001000 : initial begin
+                      forever
+                        begin
+                        $display("BOO!");
+                        #10;
+                        end
+                      end 
+          16'b000000000001001 : initial begin
+                      forever
+                        begin
+                        $display("Nyehehehe!!");
+                        #10;
+                        end
+                      end 
+          16'b000000000001010 : initial begin
+                      forever
+                        begin
+                        $display("AAAAAARRGGGGHH!!!");
+                        #10;
+                        end
+                      end
+          16'b000000000001100 : initial begin
+                      forever
+                        begin
+                        $display("*Jaw moves*");
+                        #10;
+                        end
+                      end
+          16'b000000000001110 : initial begin
+                      forever
+                        begin
+                        $display("*Wave hands*");
+                        #10;
+                        end
+                      end
+          endcase 
+         end  
+         */
+    
 	breadboard bb8(rst, clk, data);
 	
 	//CLOCK
