@@ -119,12 +119,13 @@ wire norout;
 wire orout;
 wire [15:0] d_out;
 
+decoder_4x16 decoder(d_out, opcode);
 NOR_1 nor1(Data0, norout);
-OR_1 or1(orout, norout, on);
+OR_1 or1(orout, norout, d_out[0]);
 fulladder FA(regA,regB,carry,outputADD);
 DFF ACC1 (orout,clk,next,cur);
 Mux mux1(channels,cur,opcode);
-decoder_4x16 decoder(d_out, opcode);
+
 	
 assign channels[0]=Data0;//OpCode 1
 assign channels[1]=Data1;//OpCode 2
