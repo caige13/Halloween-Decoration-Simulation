@@ -94,14 +94,12 @@ module DFF(rst,clk,in,out);
 endmodule
 
 ///////////////////////////////////
-module breadboard(on, clk, data);
+module breadboard( clk, data);
 input clk; 
-input on;
 input [3:0] [3:0] data;
 input norout;
 input orout;
 wire clk;
-wire on;
 wire [3:0][3:0]channels;
 wire [3:0]Data0 = data[0];
 wire [3:0]Data1 = data[1];
@@ -146,9 +144,8 @@ module testbench();
    reg [1:0] inputB;
    reg [3:0] [3:0] data;
    reg clk;
-   reg rst;
     
-	breadboard bb8(rst, clk, data);
+	breadboard bb8( clk, data);
 
 	initial begin
       	forever begin
@@ -189,10 +186,8 @@ module testbench();
 	*/
 	initial begin//Start Stimulous Thread
 	#6
-	rst=1;
 	data = 16'b0000000000000000;
 	#5
-	rst=0;
 	#30
 	data = 16'b1101111101010100;
 	#40
