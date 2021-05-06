@@ -155,15 +155,16 @@ module testbench();
 		        16'b0000000000001000 : $display("Green");
 		        16'b0000000000010000 : $display("Purple");
 		        16'b0000000000100000 : $display("Orange");
-		        16'b0000000100000000 : $display("BOO!");
-		        16'b0000000100000000 : $display("Nyehehehe!!");
 		        16'b0000000010000000 : $display("AAAAAARRGGGGHH!!!");
+		        16'b0000000100000000 : $display("Nyehehehe!!");
+		        16'b0000001000000000 : $display("BOO!");		        
 		        16'b0001000000000000 : $display("*Jaw moves*");
 		        16'b0000100000000000 : $display("*Wave hands*");
 	    	endcase
 	    	#10;
       	end
 	end
+	
 	
 	//CLOCK
    initial begin //Start Clock Thread
