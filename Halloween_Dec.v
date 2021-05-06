@@ -178,7 +178,7 @@ module testbench();
           #5; //half a wave is 5 time units
         end
     end
-	
+	/*
 	initial begin //Start Output Thread
 	forever
          begin
@@ -186,7 +186,7 @@ module testbench();
 		 #10;
 		 end
 	end
-	
+	*/
 	initial begin//Start Stimulous Thread
 	#6
 	rst=1;
