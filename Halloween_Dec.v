@@ -177,15 +177,7 @@ module testbench();
 	    	#10;
       	end
 	end
-	/*
-	initial begin //Start Output Thread
-	forever
-         begin
-		 $display("(regA:%2b)(sum:%2b)(opcode:%4b)(dec:%16b)",bb8.regA, bb8.outputADD, bb8.opcode, bb8.d_out);
-		 #10;
-		 end
-	end
-	*/
+
 	initial begin//Start Stimulous Thread
 	#6
 	data = 16'b0000000000000000;
