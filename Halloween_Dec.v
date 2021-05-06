@@ -146,24 +146,6 @@ module testbench();
    reg clk;
     
 	breadboard bb8( clk, data);
-
-	initial begin
-      	forever begin
-       		case(bb8.d_out)
-				16'b0000000000000010 : $display("NO-OP");
-	        	16'b0000000000000100 : $display("~~~~Fog~~~~~");
-		        16'b0000000000001000 : $display("Green");
-		        16'b0000000000010000 : $display("Purple");
-		        16'b0000000000100000 : $display("Orange");
-		        16'b0000000010000000 : $display("AAAAAARRGGGGHH!!!");
-		        16'b0000000100000000 : $display("Nyehehehe!!");
-		        16'b0000001000000000 : $display("BOO!");		        
-		        16'b0001000000000000 : $display("*Jaw moves*");
-		        16'b0000100000000000 : $display("*Wave hands*");
-	    	endcase
-	    	#10;
-      	end
-	end
 	
 	
 	//CLOCK
@@ -176,6 +158,24 @@ module testbench();
           #5; //half a wave is 5 time units
         end
     end
+	
+	initial begin
+      	forever begin
+       		case(bb8.d_out)
+				16'b0000000000000010 : $display("(data: %16b)(data0: %4b) NO-OP",data, bb8.Data0);
+	        	16'b0000000000001000 : $display("(data: %16b)(data0: %4b) ~~~~Fog~~~~~",data, bb8.Data0);
+		        16'b0000000000010000 : $display("(data: %16b)(data0: %4b) Green",data, bb8.Data0);
+		        16'b0000000000100000 : $display("(data: %16b)(data0: %4b) Purple",data, bb8.Data0);
+		        16'b0000000001000000 : $display("(data: %16b)(data0: %4b) Orange",data, bb8.Data0);
+		        16'b0000000100000000 : $display("(data: %16b)(data0: %4b) AAAAAARRGGGGHH!!!",data, bb8.Data0);
+		        16'b0000001000000000 : $display("(data: %16b)(data0: %4b) Nyehehehe!!",data, bb8.Data0);
+		        16'b0000010000000000 : $display("(data: %16b)(data0: %4b) BOO!",data, bb8.Data0);		        
+		        16'b0010000000000000 : $display("(data: %16b)(data0: %4b) *Jaw moves*",data, bb8.Data0);
+		        16'b0001000000000000 : $display("(data: %16b)(data0: %4b) *Wave hands*",data, bb8.Data0);
+	    	endcase
+	    	#10;
+      	end
+	end
 	/*
 	initial begin //Start Output Thread
 	forever
