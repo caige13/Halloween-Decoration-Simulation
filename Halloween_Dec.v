@@ -150,81 +150,23 @@ module testbench();
     
 	breadboard bb8(rst, clk, data);
 
-	always @(bb8.d_out) begin
-        case(bb8.d_out)
-        
-			16'b000000000000010 : begin
-                  forever
-                    begin
-                    $display("NO-OP");
-                    #10;
-                    end
-                  end 
-	        16'b000000000000000 : begin
-	                  forever
-	                    begin
-	                    $display("~~~~Fog~~~~~");
-	                    #10;
-	                    end
-	                  end
-	        16'b000000000000100 : begin
-	                      forever
-	                        begin
-	                        $display("Green");
-	                        #10;
-	                        end
-	                      end 
-	        16'b000000000000101 : begin
-	                      forever
-	                        begin
-	                        $display("Purple");
-	                        #10;
-	                        end
-	                      end 
-	        16'b000000000000110 : begin
-	                      forever
-	                        begin
-	                        $display("Orange");
-	                        #10;
-	                        end
-	                      end  
-	        16'b000000000001000 : begin
-	                      forever
-	                        begin
-	                        $display("BOO!");
-	                        #10;
-	                        end
-	                      end 
-	        16'b000000000001001 : begin
-	                      forever
-	                        begin
-	                        $display("Nyehehehe!!");
-	                        #10;
-	                        end
-	                      end 
-	        16'b000000000001010 : begin
-	                      forever
-	                        begin
-	                        $display("AAAAAARRGGGGHH!!!");
-	                        #10;
-	                        end
-	                      end
-	        16'b000000000001100 : begin
-	                      forever
-	                        begin
-	                        $display("*Jaw moves*");
-	                        #10;
-	                        end
-	                      end
-	        16'b000000000001110 : begin
-	                      forever
-	                        begin
-	                        $display("*Wave hands*");
-	                        #10;
-	                        end
-	                      end
-	          endcase 
-	         end
+	initial begin
+      	forever begin
+       		case(bb8.d_out)
+				16'b0000000000000010 : $display("NO-OP");
+	        	16'b0000000000000100 : $display("~~~~Fog~~~~~");
+		        16'b0000000000001000 : $display("Green");
+		        16'b0000000000010000 : $display("Purple");
+		        16'b0000000000100000 : $display("Orange");
+		        16'b0000000100000000 : $display("BOO!");
+		        16'b0000000100000000 : $display("Nyehehehe!!");
+		        16'b0000000010000000 : $display("AAAAAARRGGGGHH!!!");
+		        16'b0001000000000000 : $display("*Jaw moves*");
+		        16'b0000100000000000 : $display("*Wave hands*");
+	    	endcase
+	    	#10;
+      	end
+	end
 	
 	//CLOCK
    initial begin //Start Clock Thread
