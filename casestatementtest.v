@@ -10,7 +10,7 @@
 `define MOVEJAW   '4b1101 //11=Movement/Effect, 01=MOVEJAW
 `define FOG       '4b1110 //11=Movement/Effect, 10=FOG
 
-//////////////////////////////////
+
 module decoder_4x16 (d_out, d_in);
 
    output [15:0] d_out;
@@ -36,6 +36,7 @@ always @ (d_in)
                (d_in == 4'b1111) ? tmp<<15: 16'bxxxx_xxxx_xxxx_xxxx;
 
 endmodule
+
 ///////////////////////////////////
 module OR_1(output Y, input A, B);
    assign Y = A | B; 
@@ -116,13 +117,16 @@ reg  [1:0] next;
 wire [1:0] cur;
 wire norout;
 wire orout;
+wire [15:0] d_out;
 
+decoder_4x16 decoder(d_out, opcode);
 NOR_1 nor1(Data0, norout);
-OR_1 or1(orout, norout, on);
+OR_1 or1(orout, norout, d_out[0]);
 fulladder FA(regA,regB,carry,outputADD);
 DFF ACC1 (orout,clk,next,cur);
 Mux mux1(channels,cur,opcode);
 
+	
 assign channels[0]=Data0;//OpCode 1
 assign channels[1]=Data1;//OpCode 2
 assign channels[2]=Data2;//OpCode 3
@@ -143,77 +147,93 @@ module testbench();
    reg [3:0] [3:0] data;
    reg clk;
    reg rst;
-
-    /*
-   always @(d_out) begin
-	case(d_out)
-		16'b000000000000000 : initial begin
-						forever
-	 						begin
-	 						$display("~~~~Fog~~~~~");
-	 						#10;
-	 						end
-	 					end
-		16'b000000000000100 : initial begin
-								forever
-			 						begin
-			 						$display("Green");
-			 						#10;
-			 						end
-			 					end	
-		16'b000000000000101 : initial begin
-								forever
-			 						begin
-			 						$display("Purple");
-			 						#10;
-			 						end
-			 					end	
-		16'b000000000000110 : initial begin
-								forever
-			 						begin
-			 						$display("Orange");
-			 						#10;
-			 						end
-			 					end	 
-		16'b000000000001000 : initial begin
-								forever
-			 						begin
-			 						$display("BOO!");
-			 						#10;
-			 						end
-			 					end	
-		16'b000000000001001 : initial begin
-								forever
-			 						begin
-			 						$display("Nyehehehe!!");
-			 						#10;
-			 						end
-			 					end	
-		16'b000000000001010 : initial begin
-								forever
-			 						begin
-			 						$display("AAAAAARRGGGGHH!!!");
-			 						#10;
-			 						end
-			 					end
-		16'b000000000001100 : initial begin
-								forever
-			 						begin
-			 						$display("*Jaw moves*");
-			 						#10;
-			 						end
-			 					end
-		16'b000000000001110 : initial begin
-								forever
-			 						begin
-			 						$display("*Wave hands*");
-			 						#10;
-			 						end
-			 					end
-   	endcase	
-   end	
-   */
    
+    /*
+      always @(d_out) begin
+        case(d_out)
+
+			16'b000000000000010 : initial begin
+                  forever
+                    begin
+                    $display("NO-OP");
+                    #10;
+                    end
+                  end 
+
+        	16'b000000000000000 : initial begin
+                  forever
+                    begin
+                    $display("~~~~Fog~~~~~");
+                    #10;
+                    end
+                  end
+	        16'b000000000000000 : initial begin
+	                  forever
+	                    begin
+	                    $display("~~~~Fog~~~~~");
+	                    #10;
+	                    end
+	                  end
+	        16'b000000000000100 : initial begin
+	                      forever
+	                        begin
+	                        $display("Green");
+	                        #10;
+	                        end
+	                      end 
+	        16'b000000000000101 : initial begin
+	                      forever
+	                        begin
+	                        $display("Purple");
+	                        #10;
+	                        end
+	                      end 
+	        16'b000000000000110 : initial begin
+	                      forever
+	                        begin
+	                        $display("Orange");
+	                        #10;
+	                        end
+	                      end  
+	        16'b000000000001000 : initial begin
+	                      forever
+	                        begin
+	                        $display("BOO!");
+	                        #10;
+	                        end
+	                      end 
+	        16'b000000000001001 : initial begin
+	                      forever
+	                        begin
+	                        $display("Nyehehehe!!");
+	                        #10;
+	                        end
+	                      end 
+	        16'b000000000001010 : initial begin
+	                      forever
+	                        begin
+	                        $display("AAAAAARRGGGGHH!!!");
+	                        #10;
+	                        end
+	                      end
+	        16'b000000000001100 : initial begin
+	                      forever
+	                        begin
+	                        $display("*Jaw moves*");
+	                        #10;
+	                        end
+	                      end
+	        16'b000000000001110 : initial begin
+	                      forever
+	                        begin
+	                        $display("*Wave hands*");
+	                        #10;
+	                        end
+	                      end
+	          endcase 
+	         end  
+         */
+    
 	breadboard bb8(rst, clk, data);
 	
 	//CLOCK
@@ -230,7 +250,7 @@ module testbench();
 	initial begin //Start Output Thread
 	forever
          begin
-		 $display("(regA:%2b)(sum:%2b)(output:%4b)",bb8.regA, bb8.outputADD, bb8.opcode);
+		 $display("(regA:%2b)(sum:%2b)(opcode:%4b)(dec:%16b)",bb8.regA, bb8.outputADD, bb8.opcode, bb8.d_out);
 		 #10;
 		 end
 	end
