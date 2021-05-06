@@ -1,5 +1,7 @@
-`define ON        '4b0000 //00=system, 00=ON
-`define RESET     '4b0001 //00=system, 01=Reset
+`define ON        '4b0000 //00=System, 00=ON
+`define RESET     '4b0001 //00=System, 01=Reset
+`define NOOP      '4b0010 //00=System, 10=NOOP
+`define FOG       '4b0011 //11=System, 11=FOG
 `define GREEN     '4b0100 //01=Color, 00=GREEN
 `define PURPLE    '4b0101 //01=Color, 01=PURPLE
 `define ORANGE    '4b0110 //01=Color, 10=ORANGE
@@ -8,7 +10,6 @@
 `define BOO       '4b1010 //10=Sound, 10=BOO
 `define WAVEHANDS '4b1100 //11=Movement/Effect, 00=WAVEHANDS
 `define MOVEJAW   '4b1101 //11=Movement/Effect, 01=MOVEJAW
-`define FOG       '4b1110 //11=Movement/Effect, 10=FOG
 
 
 module decoder_4x16 (d_out, d_in);
@@ -190,7 +191,7 @@ module testbench();
 	data = 16'b0000000000000000;
 	#5
 	#30
-	data = 16'b1101111101010100;
+	data = 16'b0100010110011010;
 	#40
 	
 	$finish;
