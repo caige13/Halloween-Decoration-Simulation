@@ -95,9 +95,10 @@ module DFF(rst,clk,in,out);
 endmodule
 
 ///////////////////////////////////
-module breadboard( clk, data);
+module breadboard( clk, B, data);
 input clk; 
 input [3:0] [3:0] data;
+input [1:0]B;
 input norout;
 input orout;
 wire clk;
@@ -107,12 +108,12 @@ wire [3:0]Data1 = data[1];
 wire [3:0]Data2 = data[2];
 wire [3:0]Data3 = data[3];
 wire [3:0] opcode;
+wire [1:0] wireB;
+assign wireB=B;
 
 reg [1:0] regA;
-reg [1:0] regB=01;
-wire [1:0] outputADD;
+wire [1:0] addOut;
 
-reg  [1:0] next;
 wire [1:0] cur;
 wire norout;
 wire orout;
@@ -121,8 +122,8 @@ wire [15:0] d_out;
 decoder_4x16 decoder(d_out, opcode);
 NOR_1 nor1(Data0, norout);
 OR_1 or1(orout, norout, d_out[0]);
-fulladder FA(regA,regB,carry,outputADD);
-DFF ACC1 (orout,clk,next,cur);
+fulladder FA(regA,wireB,carry,addOut);
+DFF ACC1 (orout,clk,addOut,cur);
 Mux mux1(channels,cur,opcode);
 
 	
@@ -134,8 +135,6 @@ assign channels[3]=Data3;//OpCode 4
 always @(*)
 begin
  regA=cur;
-
- assign next=outputADD;
 end
 endmodule
 
@@ -144,9 +143,10 @@ module testbench();
    reg [1:0] inputA;
    reg [1:0] inputB;
    reg [3:0] [3:0] data;
+   reg [1:0] B = 01;
    reg clk;
     
-	breadboard bb8( clk, data);
+	breadboard bb8( clk, B, data);
 	
 	
 	//CLOCK
@@ -163,36 +163,36 @@ module testbench();
 	initial begin
       	forever begin
        		case(bb8.d_out)
-				16'b0000000000000010 : $display("(data: %16b)(data0: %4b) NO-OP",data, bb8.Data0);
-	        	16'b0000000000001000 : $display("(data: %16b)(data0: %4b) ~~~~Fog~~~~~",data, bb8.Data0);
-		        16'b0000000000010000 : $display("(data: %16b)(data0: %4b) Green",data, bb8.Data0);
-		        16'b0000000000100000 : $display("(data: %16b)(data0: %4b) Purple",data, bb8.Data0);
-		        16'b0000000001000000 : $display("(data: %16b)(data0: %4b) Orange",data, bb8.Data0);
-		        16'b0000000100000000 : $display("(data: %16b)(data0: %4b) AAAAAARRGGGGHH!!!",data, bb8.Data0);
-		        16'b0000001000000000 : $display("(data: %16b)(data0: %4b) Nyehehehe!!",data, bb8.Data0);
-		        16'b0000010000000000 : $display("(data: %16b)(data0: %4b) BOO!",data, bb8.Data0);		        
-		        16'b0010000000000000 : $display("(data: %16b)(data0: %4b) *Jaw moves*",data, bb8.Data0);
-		        16'b0001000000000000 : $display("(data: %16b)(data0: %4b) *Wave hands*",data, bb8.Data0);
+				16'b0000000000001000 : $display("(clk: %1b)(data: %16b)(opcode: %4b) ~~~~Fog~~~~~", clk, data, bb8.opcode);
+		        16'b0000000000010000 : $display("(clk: %1b)(data: %16b)(opcode: %4b) Green", clk,data, bb8.opcode);
+		        16'b0000000000100000 : $display("(clk: %1b)(data: %16b)(opcode: %4b) Purple", clk,data, bb8.opcode);
+		        16'b0000000001000000 : $display("(clk: %1b)(data: %16b)(opcode: %4b) Orange", clk,data, bb8.opcode);
+		        16'b0000000100000000 : $display("(clk: %1b)(data: %16b)(opcode: %4b) AAAAAARRGGGGHH!!!", clk,data, bb8.opcode);
+		        16'b0000001000000000 : $display("(clk: %1b)(data: %16b)(opcode: %4b) Nyehehehe!!", clk,data, bb8.opcode);
+		        16'b0000010000000000 : $display("(clk: %1b)(data: %16b)(opcode: %4b) BOO!", clk,data, bb8.opcode);		        
+		        16'b0010000000000000 : $display("(clk: %1b)(data: %16b)(opcode: %4b) *Jaw moves*", clk,data, bb8.opcode);
+		        16'b0001000000000000 : $display("(clk: %1b)(data: %16b)(opcode: %4b) *Wave hands*", clk,data, bb8.opcode);
 	    	endcase
 	    	#10;
       	end
 	end
-	/*
-	initial begin //Start Output Thread
-	forever
-         begin
-		 $display("(regA:%2b)(sum:%2b)(opcode:%4b)(dec:%16b)",bb8.regA, bb8.outputADD, bb8.opcode, bb8.d_out);
-		 #10;
-		 end
-	end
-	*/
+	
+	/*Channel 0 in MUX is the first 4 bits from the right
+	Channel 1 is the 4 bits to the left of Channel 0's bits, etc */
 	initial begin//Start Stimulous Thread
-	#6
+	//Turn on
 	data = 16'b0000000000000000;
-	#5
-	#30
-	data = 16'b0100010110011010;
+	#6
+	//Button 1: Fog, Green, Purple, Screaming
+	data = 16'b0011010001011000;
 	#40
+	//Button 2: Orange, Cackling, Move Jaw, Wave Hands
+	data = 16'b0110100111011100;
+	#40
+	//Button 3: BOO, Green, Reset, NO-OP
+	data = 16'b1010010000010010;
+	#40
+	
 	
 	$finish;
 	end
